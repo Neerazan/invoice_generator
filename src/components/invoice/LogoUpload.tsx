@@ -68,10 +68,10 @@ export default function LogoUploadWithPreview() {
                     border-2 border-dashed rounded-lg
                     ${
                         isDragging
-                            ? "border-blue-500 bg-blue-100"
-                            : "border-blue-200 bg-blue-50/30"
+                            ? "border-[#4AC49E] bg-[#D8FAE9]"
+                            : "border-[#90E6C7] bg-[#edfff6]"
                     }
-                    hover:border-blue-400 hover:bg-blue-50
+                    hover:border-[#4AC49E] hover:bg-[#D8FAE9]
                     transition-colors duration-200
                     cursor-pointer
                     group
@@ -90,8 +90,8 @@ export default function LogoUploadWithPreview() {
                         accept="image/*"
                         onChange={handleFileChange}
                     />
-                    <UploadIcon className="w-8 h-8 mb-2 text-blue-300 group-hover:text-blue-500 transition-colors duration-200" />
-                    <p className="text-lg font-medium text-blue-300 group-hover:text-blue-500 transition-colors duration-200">
+                    <UploadIcon className="w-8 h-8 mb-2 text-[#90E6C7] group-hover:text-[#4AC49E] transition-colors duration-200" />
+                    <p className="text-lg font-medium text-[#90E6C7] group-hover:text-[#4AC49E] transition-colors duration-200">
                         Upload Your Logo
                     </p>
                 </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
@@ -12,19 +11,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X } from 'lucide-react';
+import { LineItem } from '@/Types';
 
-interface LineItem {
-    id: number;
-    description: string;
-    quantity: number;
-    rate: number;
-}
 
-export default function InvoiceItemsTable() {
-    const [items, setItems] = useState<LineItem[]>([
-        { id: 1, description: '', quantity: 1, rate: 32 },
-        { id: 2, description: '', quantity: 3, rate: 4 },
-    ]);
+export default function InvoiceItemsTable({
+    currency,
+    items,
+    setItems,
+} : { currency: string, items: LineItem[], setItems: (items: LineItem[]) => void} ) {
+
+    
 
     const addNewLine = () => {
         setItems([
@@ -69,11 +65,11 @@ export default function InvoiceItemsTable() {
                             <TableHead className="w-[40%] font-bold px-7">
                                 Item Description
                             </TableHead>
-                            <TableHead className="text-right font-bold">Qty</TableHead>
-                            <TableHead className="text-right font-bold">
-                                Rate (₹)
+                            <TableHead className="text-center font-bold">Qty</TableHead>
+                            <TableHead className="text-center font-bold">
+                                Rate ({ currency && currency.split('-')[1] })
                             </TableHead>
-                            <TableHead className="text-right font-bold">Amount</TableHead>
+                            <TableHead className="font-bold">Amount</TableHead>
                             <TableHead className="w-[50px]"></TableHead>
                         </TableRow>
                     </TableHeader>
@@ -94,7 +90,8 @@ export default function InvoiceItemsTable() {
                                             )
                                         }
                                         className="border-0 bg-transparent h-auto focus-visible:ring-1 my-2
-                                        focus-visible:ring-gray-400 hover:ring-1 hover:ring-gray-400
+                                        focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
+                                        focus-visible:ring-offset-0
                                         "
                                         placeholder="Enter item description"
                                     />
@@ -111,7 +108,9 @@ export default function InvoiceItemsTable() {
                                             )
                                         }
                                         className="w-20 ml-auto border-0 bg-transparent h-auto focus-visible:ring-1 my-2
-                                        focus-visible:ring-gray-400 hover:ring-1 hover:ring-gray-400"
+                                        focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
+                                        focus-visible:ring-offset-0
+                                        "
                                     />
                                 </TableCell>
                                 <TableCell className="text-right">
@@ -126,11 +125,13 @@ export default function InvoiceItemsTable() {
                                             )
                                         }
                                         className="w-24 ml-auto border-0 bg-transparent h-auto focus-visible:ring-1 my-2
-                                        focus-visible:ring-gray-400 hover:ring-1 hover:ring-gray-400"
+                                        focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
+                                        focus-visible:ring-offset-0
+                                        "
                                     />
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    ₹{(item.quantity * item.rate).toFixed(2)}
+                                <TableCell className="">
+                                    { currency && currency.split('-')[1] } {(item.quantity * item.rate).toFixed(2)}
                                 </TableCell>
                                 <TableCell>
                                     <Button
@@ -150,7 +151,7 @@ export default function InvoiceItemsTable() {
 
             <Button
                 variant="outline"
-                className="w-full border-2 border-dashed border-gray-200 bg-[#f2f9ff] text-gray-500 hover:border-blue-300 hover:text-blue-400 hover:bg-blue-50 transition-colors duration-200 font-bold"
+                className="w-full border-2 border-dashed border-[#90E6C7] bg-[#edfff6] text-gray-500 hover:border-[#4AC49E] hover:text-gray-600 hover:bg-[#D8FAE9] transition-colors duration-200 font-bold"
                 onClick={addNewLine}
             >
                 <Plus className="h-4 w-4 mr-2" />
