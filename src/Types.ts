@@ -1,3 +1,4 @@
+
 export interface LineItem {
     id: number;
     description: string;
@@ -35,4 +36,74 @@ export interface InvoiceSummaryProps {
     taxRate: number;
     discount: number;
     items: LineItem[];
+}
+
+
+
+export interface SenderRecipientInfo {
+    id: string;
+    companyName: string;
+    taxationNumber: string;
+    email: string;
+    phone: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    zip: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PaymentInfo {
+    id: string;
+    paymentMethod?: string;
+    accountNumber: string;
+    accountName: string;
+    bankName: string;
+    bankBranch: string;
+    swiftCode: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    zip: string
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface InvoiceItem {
+    id: string;
+    description: string;
+    quantity: number;
+    rate: number;
+    amount: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Invoice {
+    id: string;
+    logoUrl: string;
+    invoiceNumber: string;
+    invoiceDate: string;
+    dueDate: string;
+    currency: string;
+    taxEnabled: boolean;
+    taxTitle: string;
+    taxPercentage: number;
+    taxAmount: number;
+    discountEnabled: boolean;
+    discountPercentage: number;
+    discountAmount: number;
+    subTotal: number;
+    total: number;
+    senderId: string;
+    recipientId: string;
+    paymentInfoId: string;
+    items: InvoiceItem[];
+    notes?: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
 }

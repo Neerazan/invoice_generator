@@ -1,26 +1,105 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
+
 import { Plus } from 'lucide-react';
-
 import { Button } from '../ui/button';
-
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 
+import BankDetails from './BankDetails';
+import SenderRecipientDetails from './SenderRecipientDetails';
 import SenderRecipentForm from './SenderRecipentForm';
+import PaymentForm from './PaymentForm';
+import { getButtonText, getStorageData } from '@/lib/helper';
+import { PaymentInfo, SenderRecipientInfo } from '@/Types';
+
+type FormType = 'from' | 'recipient' | 'payment';
 
 interface Props {
     modalOpen: boolean;
     setModalOpen: (value: boolean) => void;
     modalHeader: string;
+    formType: FormType;
 }
 
-const Modal = ({ modalOpen, setModalOpen, modalHeader }: Props) => {
+const Modal = ({ modalOpen, setModalOpen, modalHeader, formType }: Props) => {
+    const [storageData, setStorageData] = useState<PaymentInfo[] | SenderRecipientInfo[]>([]);
+
+    useEffect(() => {
+        if (modalOpen) {
+            const data = getStorageData({ formType });
+            setStorageData(data);
+        }
+    }, [modalOpen, formType]);
+
+    const handleDataUpdate = () => {
+        const newData = getStorageData({ formType });
+        setStorageData(newData);
+    };
+
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const renderForm = () => {
+        if (formType === 'from' || formType === 'recipient') {
+            return (
+                <SenderRecipentForm
+                    setModalOpen={setModalOpen}
+                    onSuccess={handleDataUpdate}
+                    formType={formType}
+                    buttonRef={buttonRef}
+                />
+            );
+        }
+        return (
+            <PaymentForm 
+                onSuccess={handleDataUpdate} 
+                buttonRef={buttonRef} 
+            />
+        );
+    };
+
+    const renderContent = () => {
+        if (formType === 'from' || formType === 'recipient') {
+            return (
+                <div className="grid grid-cols-2 gap-4">
+                    {(storageData as SenderRecipientInfo[]).map(
+                        (data, index) => (
+                            <div key={index} className="col-span-1">
+                                <SenderRecipientDetails
+                                    data={data}
+                                    onClose={() => setModalOpen(false)}
+                                    onDelete={handleDataUpdate}
+                                    formType={formType}
+                                />
+                            </div>
+                        ),
+                    )}
+                </div>
+            );
+        }
+
+        return (
+            <div className="grid grid-cols-2 gap-4">
+                {(storageData as PaymentInfo[]).map((data, index) => (
+                    <div key={index} className="col-span-1">
+                        <BankDetails
+                            paymentInfo={data}
+                            onClose={() => setModalOpen(false)}
+                            onDelete={handleDataUpdate}
+                        />
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <>
-            {/* Backdrop with blur and dark overlay */}
             {modalOpen && (
                 <div
                     className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
@@ -30,15 +109,11 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader }: Props) => {
 
             <div
                 className={`fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] overflow-y-auto overflow-x-hidden max-h-full ${
-                    modalOpen
-                        ? 'pointer-events-auto'
-                        : 'pointer-events-none'
+                    modalOpen ? 'pointer-events-auto' : 'pointer-events-none'
                 }`}
             >
                 <div className="relative w-full max-w-5xl max-h-full">
-                    {/* Modal content */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        {/* Modal header */}
                         <div className="flex items-center justify-between p-6 md:p-8 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-2xl font-bold text-gray-600 dark:text-white uppercase">
                                 {modalHeader}
@@ -67,27 +142,25 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader }: Props) => {
                             </button>
                         </div>
 
-                        {/* Modal body */}
                         <div className="p-4 md:p-8 space-y-4">
                             <Collapsible>
                                 <CollapsibleTrigger>
                                     <Button
+                                        ref={buttonRef}
                                         variant="outline"
                                         className="border-2 border-dashed border-[#90E6C7] bg-[#edfff6] text-gray-500 hover:border-[#4AC49E] hover:text-gray-600 hover:bg-[#D8FAE9] transition-colors duration-200 font-bold rounded-sm"
                                     >
                                         <Plus className="h-4 w-4 mr-2" />
-                                        Add {modalHeader.split(' ')[0]}
+                                        {getButtonText({ formType })}
                                     </Button>
                                 </CollapsibleTrigger>
 
-
-                                <CollapsibleContent
-                                    className='mt-8'
-                                >
-                                    {/* Sender Recipent Form */}
-                                    <SenderRecipentForm />
+                                <CollapsibleContent className="mt-8">
+                                    {renderForm()}
                                 </CollapsibleContent>
                             </Collapsible>
+
+                            {renderContent()}
                         </div>
                     </div>
                 </div>

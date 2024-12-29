@@ -1,12 +1,23 @@
 import { Card } from '@/components/ui/card';
 import { CreditCard } from 'lucide-react';
 
-export default function PaymentDetails() {
+interface props {
+    modalOpen: boolean;
+    setModalOpen: (value: boolean) => void;
+}
+
+export default function PaymentDetails({
+    modalOpen,
+    setModalOpen
+} : props) {
     return (
         <div className="w-full max-w-2xl space-y-2 p-4">
             <h2 className="text-lg text-gray-600">Payment Details:</h2>
             <Card className="bg-[#edfff6] p-6 cursor-pointer transition-all border-2 border-transparent hover:border-dashed hover:border-[#4AC49E] hover:bg-[#D8FAE9] group">
-                <div className="flex items-center gap-4">
+                <div 
+                    className="flex items-center gap-4"
+                    onClick={() => setModalOpen(!modalOpen)}
+                >
                     <CreditCard className="h-8 w-8 text-gray-400 group-hover:text-gray-600" />
                     <div className="space-y-1">
                         <h3 className="text-base text-gray-500 font-semibold group-hover:text-gray-600">

@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
-
+import React, { useState } from 'react';
 import LogoUpload from '@/components/invoice/LogoUpload';
 import InvoiceFromTo from '@/components/invoice/InvoiceFromTo';
 import InvoiceInfo from '@/components/invoice/InvoiceInfo';
@@ -10,10 +9,9 @@ import InvoiceSummary from '@/components/invoice/InvoiceSummary';
 import PaymentDetails from '@/components/invoice/PaymentDetails';
 import NotesSection from '@/components/invoice/NotesSection';
 import TaxDiscount from '@/components/invoice/TaxDiscountSetting';
-
 import Modal from './Modal';
-
-import { LineItem } from '@/Types';
+import { LineItem, Invoice } from '@/Types';
+import { InvoiceManager } from '@/lib/InvoiceManager';
 
 
 const MainPage: React.FC = () => {
@@ -33,9 +31,14 @@ const MainPage: React.FC = () => {
         },
     ]);
 
-
     const [fromModalOpen, setFromModalOpen] = useState<boolean>(false);
     const [recipientModalOpen, setRecipientModalOpen] = useState<boolean>(false);
+    const [paymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
+
+
+    // useEffect(() => {
+    const invoice = InvoiceManager();
+    // }, []);
 
     return (
         <main className="container mx-auto mt-8 rounded relative">
@@ -44,6 +47,7 @@ const MainPage: React.FC = () => {
                     {/* Invoice Title */}
                     <div className="uppercase w-full font-bold text-3xl mb-4 text-gray-600">
                         Invoice
+                        {/* {invoice && <span className="text-sm text-gray-400"> # {invoice.id}</span>} */}
                     </div>
 
 
@@ -86,7 +90,11 @@ const MainPage: React.FC = () => {
 
                     {/* Payment and Invoice Summary */}
                     <div className="grid grid-cols-2 gap-4 mt-4">
-                        <PaymentDetails />
+                        <PaymentDetails 
+                            modalOpen={paymentModalOpen}
+                            setModalOpen={setPaymentModalOpen}
+                        />
+
                         <InvoiceSummary 
                             taxEnabled={taxEnabled}
                             discountEnabled={discountEnabled}
@@ -130,9 +138,10 @@ const MainPage: React.FC = () => {
                     modalOpen={fromModalOpen}
                     setModalOpen={setFromModalOpen}
                     modalHeader="Sender Information"
+                    formType='from'
                 />
-
             }
+
 
             {
                 recipientModalOpen && 
@@ -140,6 +149,17 @@ const MainPage: React.FC = () => {
                     modalOpen={recipientModalOpen}
                     setModalOpen={setRecipientModalOpen}
                     modalHeader="Recipient Information"
+                    formType='recipient'
+                />
+            }
+
+            {
+                paymentModalOpen && 
+                <Modal 
+                    modalOpen={paymentModalOpen}
+                    setModalOpen={setPaymentModalOpen}
+                    modalHeader="Payment Details"
+                    formType='payment'
                 />
             }
         </main>

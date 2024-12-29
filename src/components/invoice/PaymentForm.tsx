@@ -21,48 +21,41 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+
 import { currencies } from '@/constants/countryAndCurrencies';
 import { storageManager } from '@/LocalStorage';
 import { useLocalStorage } from '@/components/hooks/useLocalStorage';
-import { useToast } from "@/components/hooks/use-toast"
+import { useToast } from '@/components/hooks/use-toast';
 
-import { SenderRecipientInfo } from '@/Types';
+import { PaymentInfo } from '@/Types';
+
 
 interface Props {
-    setModalOpen: (value: boolean) => void;
     onSuccess: () => void;
-    formType: 'from' | 'recipient' | 'payment';
     buttonRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-const SenderRecipientForm = (
-    { setModalOpen, onSuccess, formType, buttonRef } : Props
-) => {
-
-    const form = useForm<SenderRecipientInfo>({});
-
+const PaymentForm = ({ onSuccess, buttonRef } : Props) => {
+    const form = useForm<PaymentInfo>();
     const isLocalStorageAvailable = useLocalStorage();
     const { toast } = useToast();
 
-    const onSubmit = (data: SenderRecipientInfo) => {
+    const onSubmit = (data: PaymentInfo) => {
         if (isLocalStorageAvailable) {
-            formType === 'from' ? storageManager.addSender(data) : storageManager.addRecipient(data);
+            storageManager.addPaymentInfo(data);
+            toast({
+                description: 'Payment information has been added successfully.',
+                variant: 'success',
+            });
             buttonRef.current?.click();
             onSuccess();
-
-            toast({
-                description: `${formType === 'from' ? 'Sender' : 'Recipient'} added successfully`,
-                variant: "success"
-            });
         } else {
-            setModalOpen(false);
-
             toast({
-                description: "Local storage is not available",
-                variant: "destructive",
+                title: 'Local Storage Unavailable',
+                variant: 'destructive',
             });
         }
-    };
+    }
 
     return (
         <Card className="w-full border-transparent rounded-none">
@@ -75,15 +68,15 @@ const SenderRecipientForm = (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField
                                 control={form.control}
-                                name="companyName"
+                                name='paymentMethod'
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-sm font-medium">
-                                            Company/Person Name
+                                            Payment Method
                                         </FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="John Doe / Apple Inc"
+                                                placeholder="Bank Transfer"
                                                 className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
                                                 {...field}
                                             />
@@ -95,15 +88,99 @@ const SenderRecipientForm = (
 
                             <FormField
                                 control={form.control}
-                                name="taxationNumber"
+                                name="accountNumber"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-sm font-medium">
-                                            Taxation No./Registration No.
+                                            Account Number
                                         </FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="PAN/VAT/GST/TAX/DST/EIN/ABN"
+                                                placeholder="77436782398457823"
+                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField
+                                control={form.control}
+                                name='accountName'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-sm font-medium">
+                                            Account Name
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="John Doe"
+                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="bankName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-sm font-medium">
+                                            Bank Name
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Global IME Bank"
+                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField
+                                control={form.control}
+                                name='bankBranch'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-sm font-medium">
+                                            Branch
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Kathmandu"
+                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="swiftCode"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-sm font-medium">
+                                            Swift Code
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="GLBBNPKA"
                                                 className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
                                                 {...field}
                                             />
@@ -150,29 +227,6 @@ const SenderRecipientForm = (
 
                             <FormField
                                 control={form.control}
-                                name="phone"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-sm font-medium">
-                                            Phone Number
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="tel"
-                                                placeholder="Phone Number"
-                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormField
-                                control={form.control}
                                 name="state"
                                 render={({ field }) => (
                                     <FormItem>
@@ -182,27 +236,6 @@ const SenderRecipientForm = (
                                         <FormControl>
                                             <Input
                                                 placeholder="State"
-                                                className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-sm font-medium">
-                                            Email Address
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="email"
-                                                placeholder="Email Address"
                                                 className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
                                                 {...field}
                                             />
@@ -224,7 +257,7 @@ const SenderRecipientForm = (
                                         </FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="Address"
+                                                placeholder="Full Address"
                                                 className="text-gray-700 rounded-sm border-gray-400 h-auto py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-emerald-500"
                                                 {...field}
                                             />
@@ -297,4 +330,5 @@ const SenderRecipientForm = (
     );
 };
 
-export default SenderRecipientForm;
+
+export default PaymentForm;
