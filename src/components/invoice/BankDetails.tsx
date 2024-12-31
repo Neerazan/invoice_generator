@@ -1,15 +1,6 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-
 import { X, Check, Landmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PaymentInfo } from '@/Types';

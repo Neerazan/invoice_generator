@@ -12,15 +12,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X } from 'lucide-react';
 import { LineItem } from '@/Types';
+import { Invoice } from '@/Types';
 
+interface Props {
+    currency: string;
+    items: LineItem[];
+    setItems: (items: LineItem[]) => void;
+    currentInvoice: Invoice | null;
+}
 
 export default function InvoiceItemsTable({
     currency,
     items,
     setItems,
-} : { currency: string, items: LineItem[], setItems: (items: LineItem[]) => void} ) {
-
-    
+}: Props) {
+    // useEffect(() => {
+    //     if (currentInvoice) {
+    //         setItems
+    //     }
+    // }, [currentInvoice]);
 
     const addNewLine = () => {
         setItems([
@@ -65,9 +75,11 @@ export default function InvoiceItemsTable({
                             <TableHead className="w-[40%] font-bold px-7">
                                 Item Description
                             </TableHead>
-                            <TableHead className="text-center font-bold">Qty</TableHead>
                             <TableHead className="text-center font-bold">
-                                Rate ({ currency && currency.split('-')[1] })
+                                Qty
+                            </TableHead>
+                            <TableHead className="text-center font-bold">
+                                Rate ({currency && currency.split('-')[1]})
                             </TableHead>
                             <TableHead className="font-bold">Amount</TableHead>
                             <TableHead className="w-[50px]"></TableHead>
@@ -89,6 +101,7 @@ export default function InvoiceItemsTable({
                                                 e.target.value,
                                             )
                                         }
+                                        name="description"
                                         className="border-0 bg-transparent h-auto focus-visible:ring-1 my-2
                                         focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
                                         focus-visible:ring-offset-0
@@ -107,6 +120,7 @@ export default function InvoiceItemsTable({
                                                 e.target.value,
                                             )
                                         }
+                                        name="quantity"
                                         className="w-20 ml-auto border-0 bg-transparent h-auto focus-visible:ring-1 my-2
                                         focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
                                         focus-visible:ring-offset-0
@@ -124,6 +138,7 @@ export default function InvoiceItemsTable({
                                                 e.target.value,
                                             )
                                         }
+                                        name="rate"
                                         className="w-24 ml-auto border-0 bg-transparent h-auto focus-visible:ring-1 my-2
                                         focus-visible:ring-[#059669] hover:ring-1 hover:ring-[#059669]
                                         focus-visible:ring-offset-0
@@ -131,7 +146,8 @@ export default function InvoiceItemsTable({
                                     />
                                 </TableCell>
                                 <TableCell className="">
-                                    { currency && currency.split('-')[1] } {(item.quantity * item.rate).toFixed(2)}
+                                    {currency && currency.split('-')[1]}{' '}
+                                    {(item.quantity * item.rate).toFixed(2)}
                                 </TableCell>
                                 <TableCell>
                                     <Button

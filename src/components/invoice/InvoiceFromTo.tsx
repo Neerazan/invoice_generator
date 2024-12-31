@@ -7,7 +7,12 @@ interface Props {
     setModalOpen: (value: boolean) => void;
 }
 
-const InvoiceFromTo = ({ invoiceDestination, invoiceText, modalOpen, setModalOpen }: Props) => {
+const InvoiceFromTo = ({ 
+    invoiceDestination, 
+    invoiceText, 
+    modalOpen, 
+    setModalOpen,
+}: Props) => {
 
     return (
         <>

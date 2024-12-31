@@ -25,9 +25,11 @@ interface Props {
     setModalOpen: (value: boolean) => void;
     modalHeader: string;
     formType: FormType;
+    selectedId: string;
+    setSelectedId: (value: string) => void;
 }
 
-const Modal = ({ modalOpen, setModalOpen, modalHeader, formType }: Props) => {
+const Modal = ({ modalOpen, setModalOpen, modalHeader, formType, selectedId, setSelectedId }: Props) => {
     const [storageData, setStorageData] = useState<PaymentInfo[] | SenderRecipientInfo[]>([]);
 
     useEffect(() => {
@@ -36,6 +38,7 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader, formType }: Props) => {
             setStorageData(data);
         }
     }, [modalOpen, formType]);
+
 
     const handleDataUpdate = () => {
         const newData = getStorageData({ formType });
@@ -75,6 +78,8 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader, formType }: Props) => {
                                     onClose={() => setModalOpen(false)}
                                     onDelete={handleDataUpdate}
                                     formType={formType}
+                                    selectedId={selectedId}
+                                    setSelectedId={setSelectedId}
                                 />
                             </div>
                         ),

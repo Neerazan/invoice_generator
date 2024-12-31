@@ -1,14 +1,6 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 
 import { X, Check, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,13 +14,17 @@ interface Props {
     onDelete?: () => void;
     onClose?: () => void;
     formType: 'from' | 'recipient' | 'payment';
+    selectedId: string;
+    setSelectedId: (value: string) => void;
 }
 
 export default function SenderRecipientDetails({
     data = {} as SenderRecipientInfo,
     onDelete,
     onClose,
-    formType
+    formType,
+    selectedId,
+    setSelectedId
 }: Props) {
 
     const { toast } = useToast();
@@ -47,6 +43,10 @@ export default function SenderRecipientDetails({
                 variant: 'destructive'
             });
         }
+    }
+
+    const handleSelect = (id: string) => {
+        setSelectedId(id);  
     }
 
     return (
@@ -83,6 +83,7 @@ export default function SenderRecipientDetails({
                         className="bg-green-600 text-white text-xs 
                         hidden group-hover/btn:block 
                         transition-all duration-500 whitespace-nowrap font-semibold"
+                        onClick={() => handleSelect(data.id)}
                     >
                         Select
                     </span>

@@ -3,11 +3,12 @@
 import { STORAGE_KEYS } from '@/storageKeys';
 import { Invoice } from '@/Types';
 import { storageManager } from '@/LocalStorage';
-import { useLocalStorage } from '@/components/hooks/useLocalStorage';
+// import { useLocalStorage } from '@/components/hooks/useLocalStorage';
+
 
 export const InvoiceManager = () => {
-    const isLocalStorageAvailable = useLocalStorage();
-    if (isLocalStorageAvailable) {
+    // const isLocalStorageAvailable = useLocalStorage();
+    if (true) {
         const storedInvoices = localStorage.getItem(STORAGE_KEYS.INVOICES);
         if (storedInvoices) {
             const invoices = JSON.parse(storedInvoices) as Invoice[];

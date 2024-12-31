@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoUpload from '@/components/invoice/LogoUpload';
 import InvoiceFromTo from '@/components/invoice/InvoiceFromTo';
 import InvoiceInfo from '@/components/invoice/InvoiceInfo';
@@ -12,6 +12,8 @@ import TaxDiscount from '@/components/invoice/TaxDiscountSetting';
 import Modal from './Modal';
 import { LineItem, Invoice } from '@/Types';
 import { InvoiceManager } from '@/lib/InvoiceManager';
+import { useDebounce } from '../hooks/useDebounce';
+import { storageManager } from '@/LocalStorage';
 
 
 const MainPage: React.FC = () => {
@@ -21,24 +23,53 @@ const MainPage: React.FC = () => {
     const [discount, setDiscount] = useState<number>(10);
     const [taxEnabled, setTaxEnabled] = useState<boolean>(true);
     const [discountEnabled, setDiscountEnabled] = useState<boolean>(false);
-    
     const [items, setItems] = useState<LineItem[]>([
         {
             id: 1,
             description: '',
             quantity: 1,
-            rate: 0,
+            rate: 1,
         },
     ]);
-
     const [fromModalOpen, setFromModalOpen] = useState<boolean>(false);
     const [recipientModalOpen, setRecipientModalOpen] = useState<boolean>(false);
     const [paymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
+    const [selectedRecipient, setSelectedRecipient] = useState<string>('');
+    const [selectedSender, setSelectedSender] = useState<string>('');
+    const [selectedPaymentInfo, setSelectedPaymentInfo] = useState<string>('');
+    const [curentInvoice, setCurrentInvoice] = useState<Invoice | null>(null);
+    
 
+    const debouncedItems = useDebounce(items, 500);
 
-    // useEffect(() => {
-    const invoice = InvoiceManager();
-    // }, []);
+    useEffect(() => {
+        const invoice = InvoiceManager();
+        if (invoice) {
+            setCurrentInvoice(invoice);
+        }
+    }, []);
+
+    useEffect(() => {
+        const invoice = InvoiceManager();
+        if (invoice) {
+            if (curentInvoice) {
+                storageManager.updateInvoice(
+                    invoice.id,
+                    {
+                        taxTitle: taxTitle,
+                        taxPercentage: taxRate,
+                        discountPercentage: discount,
+                        taxEnabled: taxEnabled,
+                        discountEnabled: discountEnabled,
+                        senderId: selectedSender,
+                        recipientId: selectedRecipient,
+                        paymentInfoId: selectedPaymentInfo
+                    }
+                )
+            }
+        }
+    }, [debouncedItems, taxTitle, taxRate, discount, taxEnabled, discountEnabled, selectedSender, selectedRecipient, selectedPaymentInfo]);
+
 
     return (
         <main className="container mx-auto mt-8 rounded relative">
@@ -47,7 +78,6 @@ const MainPage: React.FC = () => {
                     {/* Invoice Title */}
                     <div className="uppercase w-full font-bold text-3xl mb-4 text-gray-600">
                         Invoice
-                        {/* {invoice && <span className="text-sm text-gray-400"> # {invoice.id}</span>} */}
                     </div>
 
 
@@ -85,6 +115,7 @@ const MainPage: React.FC = () => {
                         currency={currency}
                         items={items}
                         setItems={setItems}
+                        currentInvoice={curentInvoice}
                     />
 
 
@@ -139,6 +170,8 @@ const MainPage: React.FC = () => {
                     setModalOpen={setFromModalOpen}
                     modalHeader="Sender Information"
                     formType='from'
+                    selectedId={selectedSender}
+                    setSelectedId={setSelectedSender}
                 />
             }
 
@@ -150,6 +183,8 @@ const MainPage: React.FC = () => {
                     setModalOpen={setRecipientModalOpen}
                     modalHeader="Recipient Information"
                     formType='recipient'
+                    selectedId={selectedRecipient}
+                    setSelectedId={setSelectedRecipient}
                 />
             }
 
@@ -160,6 +195,8 @@ const MainPage: React.FC = () => {
                     setModalOpen={setPaymentModalOpen}
                     modalHeader="Payment Details"
                     formType='payment'
+                    selectedId={selectedPaymentInfo}
+                    setSelectedId={setSelectedPaymentInfo}
                 />
             }
         </main>

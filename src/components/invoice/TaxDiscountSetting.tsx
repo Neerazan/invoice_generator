@@ -31,16 +31,16 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
     discount,
     setDiscount,
 }) => {
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log({
-            currency,
-            taxEnabled,
-            taxTitle: taxEnabled ? taxTitle : 'none',
-            discountEnabled,
-            discount: discountEnabled ? discount : '0',
-        });
-    };
+    // const handleSubmit = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     console.log({
+    //         currency,
+    //         taxEnabled,
+    //         taxTitle: taxEnabled ? taxTitle : 'none',
+    //         discountEnabled,
+    //         discount: discountEnabled ? discount : '0',
+    //     });
+    // };
 
     return (
         <form>

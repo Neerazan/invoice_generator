@@ -1,6 +1,6 @@
 // localStorage.ts
 import { STORAGE_KEYS } from './storageKeys';
-import { SenderRecipientInfo, PaymentInfo, InvoiceItem, Invoice } from './Types';
+import { SenderRecipientInfo, PaymentInfo, Invoice } from './Types';
 
 class LocalStorageManager {
     private static instance: LocalStorageManager;
@@ -210,6 +210,25 @@ class LocalStorageManager {
             console.error('Error importing data:', error);
             return false;
         }
+    }
+
+    updateInvoice(id: string, updates: Partial<Invoice>): Invoice | null {
+        const invoices = this.getInvoices();
+        const index = invoices.findIndex(invoice => invoice.id === id);
+        if (index === -1) return null;
+
+        // alert(`Inside Invoice Update ${updates}`);
+    
+        const updatedInvoice: Invoice = {
+            ...invoices[index],
+            ...updates,
+            updatedAt: new Date().toISOString(),
+        };
+    
+        invoices[index] = updatedInvoice;
+        this.setItem(STORAGE_KEYS.INVOICES, invoices);
+    
+        return updatedInvoice;
     }
 }
 
