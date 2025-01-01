@@ -20,7 +20,7 @@ export const InvoiceManager = () => {
                 invoiceNumber: '',
                 invoiceDate: '',
                 dueDate: '',
-                currency: '',
+                currency: 'USD-$-227',
                 taxEnabled: true,
                 taxTitle: 'Vat',
                 taxPercentage: 13,

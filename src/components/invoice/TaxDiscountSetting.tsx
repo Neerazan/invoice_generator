@@ -31,17 +31,6 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
     discount,
     setDiscount,
 }) => {
-    // const handleSubmit = (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     console.log({
-    //         currency,
-    //         taxEnabled,
-    //         taxTitle: taxEnabled ? taxTitle : 'none',
-    //         discountEnabled,
-    //         discount: discountEnabled ? discount : '0',
-    //     });
-    // };
-
     return (
         <form>
             <Card className="w-full max-w-md p-4 space-y-6 bg-slate-50 transition-all duration-300 ease-in-out">
@@ -50,9 +39,16 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
                         <label className="text-sm font-medium block mb-2">
                             Currency
                         </label>
-                        <Select value={currency} onValueChange={setCurrency}>
+                        <Select
+                            // value={currency || ''}
+                            defaultValue={currency}
+                            onValueChange={setCurrency}
+                        >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select currency" />
+                                <SelectValue placeholder="Select currency">
+                                    {currency.split('-')[0]}{' '}
+                                    {/* Explicitly show selected value */}
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 {currencies
@@ -106,19 +102,22 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
                                     Tax Title
                                 </label>
                                 <Select
-                                    value={taxTitle}
                                     onValueChange={setTaxTitle}
+                                    defaultValue={taxTitle} // Add defaultValue prop
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select tax type" />
+                                        <SelectValue placeholder="Select tax type">
+                                            {taxTitle}{' '}
+                                            {/* Explicitly show the selected value */}
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">
                                             ------------
                                         </SelectItem>
                                         <SelectItem value="Tax">Tax</SelectItem>
-                                        <SelectItem value="Vat">VAT</SelectItem>
-                                        <SelectItem value="Gst">GST</SelectItem>
+                                        <SelectItem value="Vat">Vat</SelectItem>
+                                        <SelectItem value="Gst">Gst</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <p className="text-sm text-gray-500 mt-1">
