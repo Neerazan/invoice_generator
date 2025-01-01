@@ -42,6 +42,12 @@ export default function BankDetails({
         }
     }
 
+
+    const handleSelect = (id: string) => {
+        setSelectedId(id);
+        onClose?.();
+    }
+
     return (
         <Card className="w-full p-6 bg-white shadow-lg relative group">
             {/* Select, Delete, and Edit buttons */}
@@ -69,7 +75,7 @@ export default function BankDetails({
                     size="icon"
                     variant="ghost"
                     className="text-white hover:text-white bg-green-600 hover:bg-green-600 rounded-full h-auto w-auto p-1 hover:px-4 hover:py-1 group/btn transition-all duration-200"
-                    onClick={() => setSelectedId(paymentInfo.id)}
+                    onClick={() => handleSelect(paymentInfo.id)}
                 >
                     <Check className="h-4 w-4" />
                     <span
@@ -142,12 +148,6 @@ export default function BankDetails({
                         </p>
                     </div>
                 </div>
-
-                {/* <div>
-                    <h2 className="text-base font-medium text-gray-900 mb-4">
-                        Bank Details
-                    </h2>
-                </div> */}
 
                 <div className="grid grid-cols-2 gap-x-8">
                     <div>

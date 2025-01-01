@@ -21,7 +21,7 @@ const InvoiceInfo = () => {
                 <Input
                     className="w-[65%] hover:bg-gray-100 bg-gray-50 rounded-sm px-3 py-[2px] border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#059669]"
                     type="text"
-                    value={"13/12/2024"}
+                    defaultValue={"13/12/2024"}
                 />
             </div>
             <div className="flex w-full mt-1">
@@ -31,7 +31,7 @@ const InvoiceInfo = () => {
                 <Input
                     className="w-[65%] hover:bg-gray-100 bg-gray-50 rounded-sm px-3 py-[2px] border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#059669]"
                     type="text"
-                    value={"13/12/2024"}
+                    defaultValue={"13/12/2024"}
                 />
             </div>
         </div>

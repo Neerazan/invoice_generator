@@ -124,12 +124,6 @@ export default function SenderRecipientDetails({
                     </div>
                 </div>
 
-                {/* <div>
-                    <h2 className="text-base font-medium text-gray-900 mb-4">
-                        Address Details
-                    </h2>
-                </div> */}
-
                 <div className="grid grid-cols-2 gap-x-8">
                     <div>
                         <h2 className="text-sm text-gray-500 mb-1">Address</h2>
