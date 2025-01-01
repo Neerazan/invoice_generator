@@ -82,7 +82,7 @@ const MainPage: React.FC = () => {
                 )
             }
         }
-    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo]);
+    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo, curentInvoice, selectedSender, selectedRecipient, selectedPaymentInfo, currency, taxTitle, taxRate, discount, taxEnabled, discountEnabled, items]);
 
 
     return (

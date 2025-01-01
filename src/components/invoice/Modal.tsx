@@ -45,7 +45,9 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader, formType, selectedId, set
         setStorageData(newData);
     };
 
-    const buttonRef = useRef<HTMLButtonElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(
+        null
+    );
 
     const renderForm = () => {
         if (formType === 'from' || formType === 'recipient') {
