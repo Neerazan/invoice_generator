@@ -14,6 +14,7 @@ import { LineItem, Invoice } from '@/Types';
 import { InvoiceManager } from '@/lib/InvoiceManager';
 import { useDebounce } from '../hooks/useDebounce';
 import { storageManager } from '@/LocalStorage';
+import NotesModal from './NotesModal';
 
 
 const MainPage: React.FC = () => {
@@ -31,6 +32,11 @@ const MainPage: React.FC = () => {
     const [selectedSender, setSelectedSender] = useState<string>('');
     const [selectedPaymentInfo, setSelectedPaymentInfo] = useState<string>('');
     const [curentInvoice, setCurrentInvoice] = useState<Invoice | null>(null);
+    const [invoiceNumber, setInvoiceNumber] = useState<string>('');
+    const [invoiceDate, setInvoiceDate] = useState<string>('');
+    const [dueDate, setDueDate] = useState<string>('');
+    const [isNotesModalOpen, setIsNotesModalOpen] = useState<boolean>(false);
+    const [notes, setNotes] = useState<string>('');
     
 
     const debouncedItems = useDebounce(items, 500);
@@ -43,6 +49,9 @@ const MainPage: React.FC = () => {
     const debouncedSelectedSender = useDebounce(selectedSender, 500);
     const debouncedSelectedRecipient = useDebounce(selectedRecipient, 500);
     const debouncedSelectedPaymentInfo = useDebounce(selectedPaymentInfo, 500);
+    const debouncedInvoiceNumber = useDebounce(invoiceNumber, 500);
+    const debouncedInvoiceDate = useDebounce(invoiceDate, 500);
+    const debouncedDueDate = useDebounce(dueDate, 500);
 
     useEffect(() => {
         const invoice = InvoiceManager();
@@ -58,6 +67,9 @@ const MainPage: React.FC = () => {
             setSelectedSender(invoice.senderId);
             setSelectedRecipient(invoice.recipientId);
             setSelectedPaymentInfo(invoice.paymentInfoId);
+            setInvoiceNumber(invoice.invoiceNumber);
+            setInvoiceDate(invoice.invoiceDate);
+            setDueDate(invoice.dueDate);
         }
     }, []);
 
@@ -78,11 +90,14 @@ const MainPage: React.FC = () => {
                         paymentInfoId: selectedPaymentInfo,
                         currency: currency,
                         items: items,
+                        invoiceNumber: invoiceNumber,
+                        invoiceDate: invoiceDate,
+                        dueDate: dueDate
                     }
                 )
             }
         }
-    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo, curentInvoice, selectedSender, selectedRecipient, selectedPaymentInfo, currency, taxTitle, taxRate, discount, taxEnabled, discountEnabled, items]);
+    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo, curentInvoice, selectedSender, selectedRecipient, selectedPaymentInfo, currency, taxTitle, taxRate, discount, taxEnabled, discountEnabled, items, invoiceNumber, invoiceDate, dueDate, debouncedInvoiceNumber, debouncedInvoiceDate, debouncedDueDate]);
 
 
     return (
@@ -102,7 +117,14 @@ const MainPage: React.FC = () => {
                                 <LogoUpload />
                             </div>
                         </div>
-                        <InvoiceInfo />
+                        <InvoiceInfo 
+                            invoiceNumber={invoiceNumber}
+                            invoiceDate={invoiceDate}
+                            dueDate={dueDate}
+                            setInvoiceNumber={setInvoiceNumber}
+                            setInvoiceDate={setInvoiceDate}
+                            setDueDate={setDueDate}
+                        />
                     </div>
 
 
@@ -156,7 +178,10 @@ const MainPage: React.FC = () => {
 
                     {/* Notes Section */}
                     <div className="w-full mt-4">
-                        <NotesSection />
+                        <NotesSection 
+                            modalOpen={isNotesModalOpen}
+                            setModalOpen={setIsNotesModalOpen}
+                        />
                     </div>
                 </div>
 
@@ -214,6 +239,16 @@ const MainPage: React.FC = () => {
                     formType='payment'
                     selectedId={selectedPaymentInfo}
                     setSelectedId={setSelectedPaymentInfo}
+                />
+            }
+
+            {
+                isNotesModalOpen && 
+                <NotesModal 
+                    modalOpen={isNotesModalOpen}
+                    setModalOpen={setIsNotesModalOpen}
+                    notes={notes}
+                    setNotes={setNotes}
                 />
             }
         </main>

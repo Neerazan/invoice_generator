@@ -1,7 +1,24 @@
 import React from "react"
 import { Input } from "../ui/input"
 
-const InvoiceInfo = () => {
+
+interface Props {
+    invoiceNumber: string;
+    invoiceDate: string;
+    dueDate: string;
+    setInvoiceNumber: (value: string) => void;
+    setInvoiceDate: (value: string) => void;
+    setDueDate: (value: string) => void;
+}
+
+const InvoiceInfo = ({
+    invoiceNumber,
+    invoiceDate,
+    dueDate,
+    setInvoiceNumber,
+    setInvoiceDate,
+    setDueDate,
+} : Props) => {
     return (
         <div className="p-8 flex flex-col justify-center items-center w-full bg-gray-50 rounded-md text-gray-600">
             <div className="flex w-full">
@@ -12,6 +29,8 @@ const InvoiceInfo = () => {
                     className="w-[65%] hover:bg-gray-100 bg-gray-50 rounded-sm px-3 py-[2px] border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#059669]"
                     type="text"
                     placeholder="#INV-123"
+                    value = {invoiceNumber}
+                    onChange = {(e) => setInvoiceNumber(e.target.value)}
                 />
             </div>
             <div className="flex w-full mt-1">
@@ -21,7 +40,8 @@ const InvoiceInfo = () => {
                 <Input
                     className="w-[65%] hover:bg-gray-100 bg-gray-50 rounded-sm px-3 py-[2px] border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#059669]"
                     type="text"
-                    defaultValue={"13/12/2024"}
+                    value = {invoiceDate}
+                    onChange = {(e) => setInvoiceDate(e.target.value)}
                 />
             </div>
             <div className="flex w-full mt-1">
@@ -31,7 +51,8 @@ const InvoiceInfo = () => {
                 <Input
                     className="w-[65%] hover:bg-gray-100 bg-gray-50 rounded-sm px-3 py-[2px] border-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#059669]"
                     type="text"
-                    defaultValue={"13/12/2024"}
+                    value = {dueDate}
+                    onChange = {(e) => setDueDate(e.target.value)}
                 />
             </div>
         </div>
