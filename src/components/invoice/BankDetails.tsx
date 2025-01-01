@@ -11,12 +11,16 @@ interface BankDetailsProps {
     paymentInfo?: PaymentInfo;
     onDelete?: () => void;
     onClose?: () => void;
+    selectedId: string;
+    setSelectedId: (value: string) => void;
 }
 
 export default function BankDetails({
     paymentInfo = {} as PaymentInfo,
     onDelete,
     onClose,
+    selectedId,
+    setSelectedId
 }: BankDetailsProps) {
 
     const { toast } = useToast();
@@ -65,7 +69,7 @@ export default function BankDetails({
                     size="icon"
                     variant="ghost"
                     className="text-white hover:text-white bg-green-600 hover:bg-green-600 rounded-full h-auto w-auto p-1 hover:px-4 hover:py-1 group/btn transition-all duration-200"
-                    onClick={onClose}
+                    onClick={() => setSelectedId(paymentInfo.id)}
                 >
                     <Check className="h-4 w-4" />
                     <span

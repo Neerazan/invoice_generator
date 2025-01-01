@@ -4,6 +4,8 @@ export interface LineItem {
     description: string;
     quantity: number;
     rate: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 
@@ -72,16 +74,6 @@ export interface PaymentInfo {
     updatedAt: string;
 }
 
-export interface InvoiceItem {
-    id: string;
-    description: string;
-    quantity: number;
-    rate: number;
-    amount: number;
-    createdAt: string;
-    updatedAt: string;
-}
-
 export interface Invoice {
     id: string;
     logoUrl: string;
@@ -101,7 +93,7 @@ export interface Invoice {
     senderId: string;
     recipientId: string;
     paymentInfoId: string;
-    items: InvoiceItem[];
+    items: LineItem[];
     notes?: string;
     isActive: boolean;
     createdAt: string;

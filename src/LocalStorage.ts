@@ -37,6 +37,11 @@ class LocalStorageManager {
         return this.getItem<SenderRecipientInfo>(STORAGE_KEYS.SENDERS);
     }
 
+    getIndividualSender(id: string): SenderRecipientInfo | null {
+        const senders = this.getSenders();
+        return senders.find(sender => sender.id === id) || null;
+    }
+
     addSender(
         sender: Omit<SenderRecipientInfo, 'id' | 'createdAt' | 'updatedAt'>,
     ): SenderRecipientInfo {
@@ -79,6 +84,11 @@ class LocalStorageManager {
         return this.getItem<SenderRecipientInfo>(STORAGE_KEYS.RECIPIENTS);
     }
 
+    getIndividualRecipient(id: string): SenderRecipientInfo | null {
+        const recipients = this.getRecipients();
+        return recipients.find(recipient => recipient.id === id) || null;
+    }
+
     addRecipient(
         recipient: Omit<SenderRecipientInfo, 'id' | 'createdAt' | 'updatedAt'>,
     ): SenderRecipientInfo {
@@ -104,6 +114,11 @@ class LocalStorageManager {
     // Payment Info methods
     getPaymentInfo(): PaymentInfo[] {
         return this.getItem<PaymentInfo>(STORAGE_KEYS.PAYMENT_INFO);
+    }
+
+    getIndividualPaymentInfo(id: string): PaymentInfo | null {
+        const paymentInfos = this.getPaymentInfo();
+        return paymentInfos.find(paymentInfo => paymentInfo.id === id) || null;
     }
 
     addPaymentInfo(

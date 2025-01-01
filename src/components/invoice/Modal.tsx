@@ -96,6 +96,8 @@ const Modal = ({ modalOpen, setModalOpen, modalHeader, formType, selectedId, set
                             paymentInfo={data}
                             onClose={() => setModalOpen(false)}
                             onDelete={handleDataUpdate}
+                            selectedId={selectedId}
+                            setSelectedId={setSelectedId}
                         />
                     </div>
                 ))}

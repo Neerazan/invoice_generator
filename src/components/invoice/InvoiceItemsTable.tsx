@@ -40,6 +40,8 @@ export default function InvoiceItemsTable({
                 description: '',
                 quantity: 1,
                 rate: 0,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
             },
         ]);
     };

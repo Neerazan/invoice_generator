@@ -23,14 +23,7 @@ const MainPage: React.FC = () => {
     const [discount, setDiscount] = useState<number>(10);
     const [taxEnabled, setTaxEnabled] = useState<boolean>(true);
     const [discountEnabled, setDiscountEnabled] = useState<boolean>(false);
-    const [items, setItems] = useState<LineItem[]>([
-        {
-            id: 1,
-            description: '',
-            quantity: 1,
-            rate: 1,
-        },
-    ]);
+    const [items, setItems] = useState<LineItem[]>([]);
     const [fromModalOpen, setFromModalOpen] = useState<boolean>(false);
     const [recipientModalOpen, setRecipientModalOpen] = useState<boolean>(false);
     const [paymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
@@ -41,11 +34,30 @@ const MainPage: React.FC = () => {
     
 
     const debouncedItems = useDebounce(items, 500);
+    const debouncedCurency = useDebounce(currency, 500);
+    const debouncedTaxTitle = useDebounce(taxTitle, 500);
+    const debouncedTaxRate = useDebounce(taxRate, 500);
+    const debouncedDiscount = useDebounce(discount, 500);
+    const debouncedTaxEnabled = useDebounce(taxEnabled, 500);
+    const debouncedDiscountEnabled = useDebounce(discountEnabled, 500);
+    const debouncedSelectedSender = useDebounce(selectedSender, 500);
+    const debouncedSelectedRecipient = useDebounce(selectedRecipient, 500);
+    const debouncedSelectedPaymentInfo = useDebounce(selectedPaymentInfo, 500);
 
     useEffect(() => {
         const invoice = InvoiceManager();
         if (invoice) {
             setCurrentInvoice(invoice);
+            setItems(invoice.items);
+            setCurrency(invoice.currency);
+            setTaxTitle(invoice.taxTitle);
+            setTaxRate(invoice.taxPercentage);
+            setDiscount(invoice.discountPercentage);
+            setTaxEnabled(invoice.taxEnabled);
+            setDiscountEnabled(invoice.discountEnabled);
+            setSelectedSender(invoice.senderId);
+            setSelectedRecipient(invoice.recipientId);
+            setSelectedPaymentInfo(invoice.paymentInfoId);
         }
     }, []);
 
@@ -63,12 +75,14 @@ const MainPage: React.FC = () => {
                         discountEnabled: discountEnabled,
                         senderId: selectedSender,
                         recipientId: selectedRecipient,
-                        paymentInfoId: selectedPaymentInfo
+                        paymentInfoId: selectedPaymentInfo,
+                        currency: currency,
+                        items: items,
                     }
                 )
             }
         }
-    }, [debouncedItems, taxTitle, taxRate, discount, taxEnabled, discountEnabled, selectedSender, selectedRecipient, selectedPaymentInfo]);
+    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo]);
 
 
     return (
@@ -99,6 +113,7 @@ const MainPage: React.FC = () => {
                             invoiceText="Company/Person Information"
                             modalOpen={fromModalOpen}
                             setModalOpen={setFromModalOpen}
+                            selectedUser={selectedSender}
                         />
 
                         <InvoiceFromTo
@@ -106,6 +121,7 @@ const MainPage: React.FC = () => {
                             invoiceText="Recipient Information"
                             modalOpen={recipientModalOpen}
                             setModalOpen={setRecipientModalOpen}
+                            selectedUser={selectedRecipient}
                         />
                     </div>
 
@@ -124,6 +140,7 @@ const MainPage: React.FC = () => {
                         <PaymentDetails 
                             modalOpen={paymentModalOpen}
                             setModalOpen={setPaymentModalOpen}
+                            selectedPaymentInfo={selectedPaymentInfo}
                         />
 
                         <InvoiceSummary 
