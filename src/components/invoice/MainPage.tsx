@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import LogoUpload from '@/components/invoice/LogoUpload';
@@ -15,7 +15,7 @@ import { InvoiceManager } from '@/lib/InvoiceManager';
 import { useDebounce } from '../hooks/useDebounce';
 import { storageManager } from '@/LocalStorage';
 import NotesModal from './NotesModal';
-
+import InvoicePreview from './InvoicePreview';
 
 const MainPage: React.FC = () => {
     const [currency, setCurrency] = useState<string>('USD-$-227');
@@ -26,7 +26,8 @@ const MainPage: React.FC = () => {
     const [discountEnabled, setDiscountEnabled] = useState<boolean>(false);
     const [items, setItems] = useState<LineItem[]>([]);
     const [fromModalOpen, setFromModalOpen] = useState<boolean>(false);
-    const [recipientModalOpen, setRecipientModalOpen] = useState<boolean>(false);
+    const [recipientModalOpen, setRecipientModalOpen] =
+        useState<boolean>(false);
     const [paymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
     const [selectedRecipient, setSelectedRecipient] = useState<string>('');
     const [selectedSender, setSelectedSender] = useState<string>('');
@@ -37,7 +38,8 @@ const MainPage: React.FC = () => {
     const [dueDate, setDueDate] = useState<string>('');
     const [isNotesModalOpen, setIsNotesModalOpen] = useState<boolean>(false);
     const [notes, setNotes] = useState<string>('');
-    
+    const [isPreviewModalOpen, setIsPreviewModalOpen] =
+        useState<boolean>(false);
 
     const debouncedItems = useDebounce(items, 500);
     const debouncedCurency = useDebounce(currency, 500);
@@ -77,28 +79,52 @@ const MainPage: React.FC = () => {
         const invoice = InvoiceManager();
         if (invoice) {
             if (curentInvoice) {
-                storageManager.updateInvoice(
-                    invoice.id,
-                    {
-                        taxTitle: taxTitle,
-                        taxPercentage: taxRate,
-                        discountPercentage: discount,
-                        taxEnabled: taxEnabled,
-                        discountEnabled: discountEnabled,
-                        senderId: selectedSender,
-                        recipientId: selectedRecipient,
-                        paymentInfoId: selectedPaymentInfo,
-                        currency: currency,
-                        items: items,
-                        invoiceNumber: invoiceNumber,
-                        invoiceDate: invoiceDate,
-                        dueDate: dueDate
-                    }
-                )
+                storageManager.updateInvoice(invoice.id, {
+                    taxTitle: taxTitle,
+                    taxPercentage: taxRate,
+                    discountPercentage: discount,
+                    taxEnabled: taxEnabled,
+                    discountEnabled: discountEnabled,
+                    senderId: selectedSender,
+                    recipientId: selectedRecipient,
+                    paymentInfoId: selectedPaymentInfo,
+                    currency: currency,
+                    items: items,
+                    invoiceNumber: invoiceNumber,
+                    invoiceDate: invoiceDate,
+                    dueDate: dueDate,
+                });
             }
         }
-    }, [debouncedItems, debouncedCurency, debouncedTaxTitle, debouncedTaxRate, debouncedDiscount, debouncedTaxEnabled, debouncedDiscountEnabled, debouncedSelectedSender, debouncedSelectedRecipient, debouncedSelectedPaymentInfo, curentInvoice, selectedSender, selectedRecipient, selectedPaymentInfo, currency, taxTitle, taxRate, discount, taxEnabled, discountEnabled, items, invoiceNumber, invoiceDate, dueDate, debouncedInvoiceNumber, debouncedInvoiceDate, debouncedDueDate]);
-
+    }, [
+        debouncedItems,
+        debouncedCurency,
+        debouncedTaxTitle,
+        debouncedTaxRate,
+        debouncedDiscount,
+        debouncedTaxEnabled,
+        debouncedDiscountEnabled,
+        debouncedSelectedSender,
+        debouncedSelectedRecipient,
+        debouncedSelectedPaymentInfo,
+        curentInvoice,
+        selectedSender,
+        selectedRecipient,
+        selectedPaymentInfo,
+        currency,
+        taxTitle,
+        taxRate,
+        discount,
+        taxEnabled,
+        discountEnabled,
+        items,
+        invoiceNumber,
+        invoiceDate,
+        dueDate,
+        debouncedInvoiceNumber,
+        debouncedInvoiceDate,
+        debouncedDueDate,
+    ]);
 
     return (
         <main className="container mx-auto mt-8 rounded relative">
@@ -109,7 +135,6 @@ const MainPage: React.FC = () => {
                         Invoice
                     </div>
 
-
                     {/* Logo and Invoice Info */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="w-full flex items-center">
@@ -117,7 +142,7 @@ const MainPage: React.FC = () => {
                                 <LogoUpload />
                             </div>
                         </div>
-                        <InvoiceInfo 
+                        <InvoiceInfo
                             invoiceNumber={invoiceNumber}
                             invoiceDate={invoiceDate}
                             dueDate={dueDate}
@@ -126,7 +151,6 @@ const MainPage: React.FC = () => {
                             setDueDate={setDueDate}
                         />
                     </div>
-
 
                     {/* Invoice From and To */}
                     <div className="grid grid-cols-2 gap-4 mt-4">
@@ -147,25 +171,23 @@ const MainPage: React.FC = () => {
                         />
                     </div>
 
-
                     {/* Invoice Items Table */}
-                    <InvoiceItemsTable 
+                    <InvoiceItemsTable
                         currency={currency}
                         items={items}
                         setItems={setItems}
                         currentInvoice={curentInvoice}
                     />
 
-
                     {/* Payment and Invoice Summary */}
                     <div className="grid grid-cols-2 gap-4 mt-4">
-                        <PaymentDetails 
+                        <PaymentDetails
                             modalOpen={paymentModalOpen}
                             setModalOpen={setPaymentModalOpen}
                             selectedPaymentInfo={selectedPaymentInfo}
                         />
 
-                        <InvoiceSummary 
+                        <InvoiceSummary
                             taxEnabled={taxEnabled}
                             discountEnabled={discountEnabled}
                             currency={currency}
@@ -178,13 +200,12 @@ const MainPage: React.FC = () => {
 
                     {/* Notes Section */}
                     <div className="w-full mt-4">
-                        <NotesSection 
+                        <NotesSection
                             modalOpen={isNotesModalOpen}
                             setModalOpen={setIsNotesModalOpen}
                         />
                     </div>
                 </div>
-
 
                 {/* Tax and Discount Settings (SIDEBAR) */}
                 <div className="col-span-6 md:col-span-2 bg-white rounded-lg p-6 shadow-md">
@@ -201,56 +222,77 @@ const MainPage: React.FC = () => {
                         setTaxTitle={setTaxTitle}
                         setTaxRate={setTaxRate}
                         setDiscount={setDiscount}
+                        isPreviewModalOpen={isPreviewModalOpen}
+                        setIsPreviewModalOpen={setIsPreviewModalOpen}
                     />
                 </div>
             </div>
 
-            {
-                fromModalOpen && 
-                <Modal 
+            {fromModalOpen && (
+                <Modal
                     modalOpen={fromModalOpen}
                     setModalOpen={setFromModalOpen}
                     modalHeader="Sender Information"
-                    formType='from'
+                    formType="from"
                     selectedId={selectedSender}
                     setSelectedId={setSelectedSender}
                 />
-            }
+            )}
 
-
-            {
-                recipientModalOpen && 
-                <Modal 
+            {recipientModalOpen && (
+                <Modal
                     modalOpen={recipientModalOpen}
                     setModalOpen={setRecipientModalOpen}
                     modalHeader="Recipient Information"
-                    formType='recipient'
+                    formType="recipient"
                     selectedId={selectedRecipient}
                     setSelectedId={setSelectedRecipient}
                 />
-            }
+            )}
 
-            {
-                paymentModalOpen && 
-                <Modal 
+            {paymentModalOpen && (
+                <Modal
                     modalOpen={paymentModalOpen}
                     setModalOpen={setPaymentModalOpen}
                     modalHeader="Payment Details"
-                    formType='payment'
+                    formType="payment"
                     selectedId={selectedPaymentInfo}
                     setSelectedId={setSelectedPaymentInfo}
                 />
-            }
+            )}
 
-            {
-                isNotesModalOpen && 
-                <NotesModal 
+            {isNotesModalOpen && (
+                <NotesModal
                     modalOpen={isNotesModalOpen}
                     setModalOpen={setIsNotesModalOpen}
                     notes={notes}
                     setNotes={setNotes}
                 />
-            }
+            )}
+
+            {isPreviewModalOpen && (
+                // backdrop black filer whole screen
+                <>
+                    <div
+                        className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-700 ease-in-out ${
+                            isPreviewModalOpen ? 'opacity-100' : 'opacity-0'
+                        }`}
+                        onClick={() => setIsPreviewModalOpen(!isPreviewModalOpen)}
+                    ></div>
+
+                    <div
+                        className={`fixed inset-y-0 left-0 w-2/5 bg-white shadow-lg transform transition-transform duration-700 ease-in-out z-50 ${
+                            isPreviewModalOpen
+                                ? 'translate-x-0'
+                                : '-translate-x-full'
+                        }`}
+                    >
+                        <div className="p-4 h-full overflow-auto">
+                            <InvoicePreview />
+                        </div>
+                    </div>
+                </>
+            )}
         </main>
     );
 };

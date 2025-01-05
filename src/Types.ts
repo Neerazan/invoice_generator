@@ -27,6 +27,9 @@ export interface TaxDiscountSettingsProps {
 
     discount: number;
     setDiscount: (value: number) => void;
+
+    isPreviewModalOpen: boolean;
+    setIsPreviewModalOpen: (value: boolean) => void;
 }
 
 

@@ -30,6 +30,8 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
     setTaxRate,
     discount,
     setDiscount,
+    isPreviewModalOpen,
+    setIsPreviewModalOpen,
 }) => {
     return (
         <form>
@@ -181,8 +183,9 @@ const TaxDiscountSettings: React.FC<TaxDiscountSettingsProps> = ({
 
                 <div className="flex gap-4 px-2">
                     <Button
-                        type="submit"
+                        type="button"
                         className="flex-1 bg-emerald-500 hover:bg-emerald-600"
+                        onClick={() => setIsPreviewModalOpen(!isPreviewModalOpen)}
                     >
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
